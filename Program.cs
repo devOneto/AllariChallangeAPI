@@ -12,6 +12,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IFruitRepository, FruitRepository>();
 builder.Services.AddTransient<IFruitService, FruitService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Open",
+                      policy  =>
+                      {
+                          policy.WithOrigins("*","**")
+                                .AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("Open");
 
 app.UseHttpsRedirection();
 
